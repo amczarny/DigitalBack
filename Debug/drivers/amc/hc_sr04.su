@@ -1,0 +1,11 @@
+core_cm7.h:1902:22:__NVIC_EnableIRQ	16	static
+fsl_common.h:747:28:EnableIRQ	24	static
+fsl_gpio.h:253:20:GPIO_PortEnableInterrupts	16	static
+fsl_gpio.h:318:20:GPIO_PortClearInterruptFlags	16	static
+hc_sr04.c:14:6:GPIO1_Combined_0_15_IRQHandler	8	static
+hc_sr04.c:18:6:GPIO1_Combined_16_31_IRQHandler	8	static
+hc_sr04.c:22:6:HC_SR04_IRQHandler	24	static
+hc_sr04.c:39:6:HC_SR04_initialize	8	static
+hc_sr04.c:44:6:HC_SR04_initializePins	24	static
+hc_sr04.c:58:6:HC_SR04_initializeD14Pin	24	static
+hc_sr04.c:72:10:HC_SR04_measure	40	static

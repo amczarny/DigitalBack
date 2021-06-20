@@ -1,0 +1,5 @@
+max7219.c:13:6:MAX7219_transfer	16	static
+max7219.c:18:6:MAX7219_displayDigit	32	static
+max7219.c:41:6:MAX7219_initialize	40	static
+max7219.c:73:6:MAX7219_display4Digits	24	static
+max7219.c:82:6:MAX7219_display1Digit	16	static
