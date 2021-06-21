@@ -44,8 +44,8 @@ void MAX7219_initialize(void) {
 	LPSPI_MasterGetDefaultConfig(&masterConfig);
 	//MAX7219 requires 16 bit per frame
 	masterConfig.bitsPerFrame = 16;
-	//MAX7219 MAX CLK speed is 10Mhz. Set to 8Mhz (BOARD_BOOTCLOCKRUN_LPSPI_CLK_ROOT) check Clocks Diagram
 
+	//MAX7219 MAX CLK speed is 10Mhz. Set to 8Mhz (BOARD_BOOTCLOCKRUN_LPSPI_CLK_ROOT) check Clocks Diagram
 	LPSPI_MasterInit(LPSPI1, &masterConfig, BOARD_BOOTCLOCKRUN_LPSPI_CLK_ROOT);
 
 	lpspiTransfer.txData = txData;
@@ -61,11 +61,11 @@ void MAX7219_initialize(void) {
 	txData[4] = 0x0b; //scan limit register
 	txData[5] = 0x07; //display digits 0 through 7
 
-	txData[6] = 0x0a; //intensity register
-	txData[7] = 0x05; //max brightness
+	txData[6] = 0x09; //decode mode register
+	txData[7] = 0xff; //CodeB decode all digits
 
-	txData[8] = 0x09; //decode mode register
-	txData[9] = 0xff; //CodeB decode all digits
+	txData[8] = 0x0a; //intensity register
+    txData[9] = 0x05; //max brightness
 
 	MAX7219_transfer(10);
 }

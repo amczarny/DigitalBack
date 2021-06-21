@@ -49,6 +49,43 @@
 
 /* TODO: insert other definitions and declarations here. */
 #define MAX_DSITANCE 15
+#define DISTANCE_LIMIT 50
+
+#define LED_ID 0
+#define TRIGGER_ID 1
+//Config pins for sensor and leds
+//{ledPin, sensorTriggerPin}
+uint32_t pins[4][2] = {
+		{ARDUINO_A5_PIN, ARDUINO_D6_PIN},
+		{ARDUINO_A4_PIN, ARDUINO_D14_IO3_PIN},
+		{ARDUINO_A3_PIN, ARDUINO_D8_PIN},
+		{ARDUINO_A2_PIN, ARDUINO_A0_PIN}
+};
+
+//GPIO port for sensors and leds
+//{ledGPIO, sensorTriggerGPIO}
+GPIO_Type * gpios[4][2] = {
+		{GPIO1, GPIO1},
+		{GPIO1, GPIO3},
+		{GPIO1, GPIO1},
+		{GPIO1, GPIO1}
+};
+
+uint32_t trigger(uint8_t sensor) {
+	uint8_t sensorId = sensor - 1;
+	GPIO_PinWrite(gpios[sensorId][LED_ID], pins[sensorId][LED_ID], 1U);
+	uint32_t distance = HC_SR04_measure(gpios[sensorId][TRIGGER_ID], pins[sensorId][TRIGGER_ID]);
+	MAX7219_display1Digit(distance);
+
+	uint8_t str[15];
+	int size = sprintf(str, "Distance%d:%d\n", sensor, distance);
+	LPUART_WriteBlocking(LPUART2, str, size);
+	TIME_DelayMilli(5000);
+	GPIO_PinWrite(gpios[sensorId][LED_ID], pins[sensorId][LED_ID], 0U);
+
+	return distance;
+}
+
 /*
  * @brief   Application entry point.
  */
@@ -78,60 +115,30 @@ int main(void) {
 
 	LPUART_Init(LPUART2, &config, BOARD_BOOTCLOCKRUN_UART_CLK_ROOT);
 
-	uint8_t str[15];
-	int size = 0;
-
 	/* Enter an infinite loop, just incrementing a counter. */
-
 	while (1) {
-
-		//GPIO_PinWrite(ARDUINO_D4_PORT, ARDUINO_D4_PIN, 1U);
 		GPIO_PinWrite(ARDUINO_D4_PORT, ARDUINO_D4_PIN, 1U);
 		TIME_DelayMilli(500);
 		GPIO_PinWrite(ARDUINO_D4_PORT, ARDUINO_D4_PIN, 0U);
 		TIME_DelayMilli(500);
 
-		GPIO_PinWrite(ARDUINO_A5_PORT, ARDUINO_A5_PIN, 1U);
-		uint32_t distance1 = HC_SR04_measure(ARDUINO_D6_PIN, GPIO1);
-		size = sprintf(str, "Distance1:%d\n", distance1);
-	    LPUART_WriteBlocking(LPUART2,  str, size);
-		MAX7219_display1Digit(distance1);
-		TIME_DelayMilli(5000);
-	    GPIO_PinWrite(ARDUINO_A5_PORT, ARDUINO_A5_PIN, 0U);
+		uint32_t distance1 = trigger(1);
+		uint32_t distance2 = trigger(2);
+		uint32_t distance3 = trigger(3);
+		uint32_t distance4 = trigger(4);
 
-
-		GPIO_PinWrite(ARDUINO_A4_PORT, ARDUINO_A4_PIN, 1U);
-		uint32_t distance2 = HC_SR04_measure(ARDUINO_D14_IO3_PIN, GPIO3);
-		MAX7219_display1Digit(distance2);
-		size = sprintf(str, "Distance2:%d\n", distance2);
-	    LPUART_WriteBlocking(LPUART2,  str, size);
-		TIME_DelayMilli(5000);
-		GPIO_PinWrite(ARDUINO_A4_PORT, ARDUINO_A4_PIN, 0U);
-
-
-		GPIO_PinWrite(ARDUINO_A3_PORT, ARDUINO_A3_PIN, 1U);
-		uint32_t distance3 = HC_SR04_measure(ARDUINO_D8_PIN, GPIO1);
-		MAX7219_display1Digit(distance3);
-		size = sprintf(str, "Distance3:%d\n", distance3);
-	    LPUART_WriteBlocking(LPUART2,  str, size);
-		TIME_DelayMilli(5000);
-		GPIO_PinWrite(ARDUINO_A3_PORT, ARDUINO_A3_PIN, 0U);
-
-
-		GPIO_PinWrite(ARDUINO_A2_PORT, ARDUINO_A2_PIN, 1U);
-		uint32_t distance4 = HC_SR04_measure(ARDUINO_A0_PIN, GPIO1);
-		MAX7219_display1Digit(distance4);
-		size = sprintf(str, "Distance4:%d\n", distance4);
-	    LPUART_WriteBlocking(LPUART2,  str, size);
-		TIME_DelayMilli(5000);
-		GPIO_PinWrite(ARDUINO_A2_PORT, ARDUINO_A2_PIN, 0U);
-
-
-		if (distance1 > MAX_DSITANCE || distance2 > MAX_DSITANCE || distance3 > MAX_DSITANCE || distance4 > MAX_DSITANCE) {
+		if ((distance1 > MAX_DSITANCE  && distance1 < DISTANCE_LIMIT)
+				|| (distance2 > MAX_DSITANCE && distance2 < DISTANCE_LIMIT)
+				|| (distance3 > MAX_DSITANCE && distance3 < DISTANCE_LIMIT)
+				|| (distance4 > MAX_DSITANCE && distance4 < DISTANCE_LIMIT) ) {
+			//trigger motor
 			GPIO_PinWrite(ARDUINO_A1_PORT, ARDUINO_A1_PIN, 1U);
 			TIME_DelayMilli(200);
 			GPIO_PinWrite(ARDUINO_A1_PORT, ARDUINO_A1_PIN, 0U);
 			TIME_DelayMilli(200);
+			uint8_t str[15];
+			int size = sprintf(str, "Activation\n");
+			LPUART_WriteBlocking(LPUART2, str, size);
 		}
 
 	}

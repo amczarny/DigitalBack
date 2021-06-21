@@ -69,7 +69,7 @@ void HC_SR04_initializeD14Pin(uint32_t echoPin) {
 
 }
 
-uint32_t HC_SR04_measure(uint32_t triggerPin, GPIO_Type *gpio) {
+uint32_t HC_SR04_measure(GPIO_Type *gpio, uint32_t triggerPin) {
 	GPIO_PinWrite(gpio, triggerPin, 1U);
 	//wait at least 10 microseconds;
 	TIME_DelayMicro(15);
