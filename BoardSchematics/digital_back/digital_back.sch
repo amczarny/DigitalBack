@@ -553,17 +553,6 @@ F 3 "" H 6950 3150 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L digital_back-rescue:imx_1020_arduino-nxp U?
-U 1 1 60CDE84C
-P 6100 2250
-F 0 "U?" H 5850 3015 50  0000 C CNN
-F 1 "imx_1020_arduino" H 5850 2924 50  0000 C CNN
-F 2 "" H 5950 1750 50  0001 C CNN
-F 3 "" H 5950 1750 50  0001 C CNN
-	1    6100 2250
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:GND #PWR?
 U 1 1 60D23908
 P 4750 3300
@@ -622,15 +611,11 @@ Text Notes 2200 4200 0    50   ~ 0
 LED drivres
 Text Notes 9150 4550 0    50   ~ 0
 Vibration Motor driver
-Text GLabel 7200 1800 2    50   Output ~ 0
+Text GLabel 7200 2300 2    50   Output ~ 0
 A0
-Text GLabel 7200 1900 2    50   Output ~ 0
-A1
-Text GLabel 7200 2000 2    50   Output ~ 0
-A2
 Text GLabel 7200 2100 2    50   Output ~ 0
-A3
-Text GLabel 7200 2200 2    50   Output ~ 0
+A2
+Text GLabel 7200 1900 2    50   Output ~ 0
 A4
 Wire Wire Line
 	6950 1800 7200 1800
@@ -852,7 +837,7 @@ Wire Notes Line
 	6650 6800 4700 6800
 Wire Notes Line
 	4700 6800 4700 4250
-Text GLabel 7200 2300 2    50   Output ~ 0
+Text GLabel 7200 1800 2    50   Output ~ 0
 A5
 Wire Wire Line
 	7200 2300 6950 2300
@@ -890,4 +875,38 @@ Wire Notes Line
 	3500 2300 1550 2300
 Text Notes 1800 2250 0    50   ~ 0
 8 segment LED display
+Text GLabel 7200 2200 2    50   Output ~ 0
+A1
+Text GLabel 7200 2000 2    50   Output ~ 0
+A3
+$Comp
+L nxp:imx_1020_arduino U?
+U 1 1 60CDE84C
+P 6100 2250
+F 0 "U?" H 5850 3015 50  0000 C CNN
+F 1 "imx_1020_arduino" H 5850 2924 50  0000 C CNN
+F 2 "" H 5950 1750 50  0001 C CNN
+F 3 "" H 5950 1750 50  0001 C CNN
+	1    6100 2250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP C?
+U 1 1 60D372B8
+P 7600 3100
+F 0 "C?" H 7718 3146 50  0000 L CNN
+F 1 "1000uF" H 7718 3055 50  0000 L CNN
+F 2 "" H 7638 2950 50  0001 C CNN
+F 3 "~" H 7600 3100 50  0001 C CNN
+	1    7600 3100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7000 2950 7600 2950
+Wire Wire Line
+	7050 3150 7350 3150
+Wire Wire Line
+	7350 3150 7350 3250
+Wire Wire Line
+	7350 3250 7600 3250
 $EndSCHEMATC
